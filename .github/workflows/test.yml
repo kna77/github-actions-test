@@ -90,15 +90,15 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: Fetch main branch
-        run: git fetch origin main
+        run: git fetch origin main:refs/remotes/origin/main
 
       - name: Prepare preview files
         shell: bash
         run: |
           mkdir -p dist/preview
 
-          git show origin/main:index.html > dist/index.html
-          git show origin/main:style.css > dist/style.css
+          git show refs/remotes/origin/main:index.html > dist/index.html
+          git show refs/remotes/origin/main:style.css > dist/style.css
 
           cp index.html dist/preview/index.html
           cp style.css dist/preview/style.css
