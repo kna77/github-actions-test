@@ -9,6 +9,6 @@ describe("index.html", () => {
     const dom = new JSDOM(html);
     const heading = dom.window.document.querySelector("h1");
 
-    expect(heading?.textContent).toContain("こんにちは、山田太郎です");
+    expect(heading?.textContent).toContain("こんにちは、川島太郎です");
   });
 });
