@@ -95,14 +95,13 @@ jobs:
       - name: Prepare preview files
         shell: bash
         run: |
-          branch_path="${GITHUB_REF_NAME//\//-}"
-          mkdir -p dist/preview/"${branch_path}"
+          mkdir -p dist/preview
 
           git show origin/main:index.html > dist/index.html
           git show origin/main:style.css > dist/style.css
 
-          cp index.html dist/preview/"${branch_path}"/index.html
-          cp style.css dist/preview/"${branch_path}"/style.css
+          cp index.html dist/preview/index.html
+          cp style.css dist/preview/style.css
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
