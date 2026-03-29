@@ -2,8 +2,8 @@
   color-scheme: light;
   --bg: #f5f7fb;
   --card: #ffffff;
-  --text: #1f2937;
-  --muted: #6b7280;
+  --text: #1d4ed8;
+  --muted: #3b82f6;
   --accent: #2563eb;
   --shadow: 0 24px 60px rgba(37, 99, 235, 0.12);
 }
@@ -50,6 +50,7 @@ h1 {
   margin: 0;
   font-size: clamp(2rem, 4vw, 3.5rem);
   line-height: 1.1;
+  color: var(--text);
 }
 
 .lead {
