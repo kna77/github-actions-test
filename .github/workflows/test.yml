@@ -25,6 +25,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -38,7 +40,7 @@ jobs:
       - name: Run tests
         run: npm test
 
-  deploy:
+  deploy-production:
     needs: test
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
@@ -49,6 +51,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Pages
         uses: actions/configure-pages@v5
@@ -65,5 +69,46 @@ jobs:
           path: ./dist
 
       - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  deploy-preview:
+    needs: test
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/feature/')
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Pages
+        uses: actions/configure-pages@v5
+
+      - name: Fetch main branch
+        run: git fetch origin main
+
+      - name: Prepare preview files
+        shell: bash
+        run: |
+          branch_path="${GITHUB_REF_NAME//\//-}"
+          mkdir -p dist/preview/"${branch_path}"
+
+          git show origin/main:index.html > dist/index.html
+          git show origin/main:style.css > dist/style.css
+
+          cp index.html dist/preview/"${branch_path}"/index.html
+          cp style.css dist/preview/"${branch_path}"/style.css
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+      - name: Deploy preview to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
